@@ -87,7 +87,7 @@ class ThaiEnergyWebScraper:
     def extract_documents_from_page(self, url, source_config):
         """Extract document links and content from a page"""
         try:
-            print(f"🔍 Scraping: {url}")
+            print(f"  Scraping: {url}")
             response = self.session.get(url, timeout=15)
             response.raise_for_status()
             
@@ -142,11 +142,11 @@ class ThaiEnergyWebScraper:
                         self.all_documents.append(document)
                         documents_found += 1
             
-            print(f"✅ Found {documents_found} relevant documents from {url}")
+            print(f"[OK] Found {documents_found} relevant documents from {url}")
             return documents_found
             
         except Exception as e:
-            print(f"❌ Error scraping {url}: {str(e)}")
+            print(f"[ERROR] Error scraping {url}: {str(e)}")
             return 0
 
     def classify_document_type(self, title):
@@ -189,7 +189,7 @@ class ThaiEnergyWebScraper:
 
     def scrape_website_deep(self, website_name, config):
         """Deep scrape a website including subpages"""
-        print(f"\n🏢 Starting deep scrape of {website_name}")
+        print(f"\n  Starting deep scrape of {website_name}")
         
         # Start with main Thai page
         main_docs = self.extract_documents_from_page(config['thai_url'], config)
@@ -231,7 +231,7 @@ class ThaiEnergyWebScraper:
             # Remove duplicates and limit to prevent infinite crawling
             nav_links = list(set(nav_links))[:10]  # Limit to 10 subpages per site
             
-            print(f"🔍 Found {len(nav_links)} relevant subpages to scrape")
+            print(f"  Found {len(nav_links)} relevant subpages to scrape")
             
             # Scrape each subpage
             for subpage_url in nav_links:
@@ -243,14 +243,14 @@ class ThaiEnergyWebScraper:
 
     def scrape_all_websites(self):
         """Scrape all configured websites"""
-        print("🚀 Starting comprehensive Thai energy sector web scraping...")
+        print("  Starting comprehensive Thai energy sector web scraping...")
         print("=" * 70)
         
         total_docs = 0
         
         for website_name, config in self.websites.items():
             try:
-                print(f"\n📡 Processing {website_name}...")
+                print(f"\n  Processing {website_name}...")
                 initial_count = len(self.all_documents)
                 
                 self.scrape_website_deep(website_name, config)
@@ -259,24 +259,24 @@ class ThaiEnergyWebScraper:
                 site_docs = final_count - initial_count
                 total_docs += site_docs
                 
-                print(f"✅ {website_name}: Collected {site_docs} documents")
+                print(f"[OK] {website_name}: Collected {site_docs} documents")
                 
                 # Brief pause between websites
                 time.sleep(2)
                 
             except Exception as e:
-                print(f"❌ Failed to process {website_name}: {str(e)}")
+                print(f"[ERROR] Failed to process {website_name}: {str(e)}")
         
-        print(f"\n🎉 SCRAPING COMPLETE!")
-        print(f"📊 Total documents collected: {total_docs}")
-        print(f"🔍 Unique URLs processed: {len(self.seen_urls)}")
+        print(f"\n  SCRAPING COMPLETE!")
+        print(f"  Total documents collected: {total_docs}")
+        print(f"  Unique URLs processed: {len(self.seen_urls)}")
         
         return total_docs
 
     def save_to_files(self):
         """Save collected data to organized files"""
         if not self.all_documents:
-            print("❌ No documents to save!")
+            print("[ERROR] No documents to save!")
             return
         
         # Create timestamp for file naming
@@ -288,14 +288,14 @@ class ThaiEnergyWebScraper:
         # Save complete dataset
         filename_all = f"Thai_Energy_Complete_Dataset_{timestamp}.csv"
         df_all.to_csv(filename_all, index=False, encoding='utf-8-sig')
-        print(f"💾 Saved complete dataset: {filename_all}")
+        print(f"  Saved complete dataset: {filename_all}")
         
         # Save by source organization
         for org in df_all['Source'].unique():
             df_org = df_all[df_all['Source'] == org]
             filename_org = f"Thai_Energy_{org}_Dataset_{timestamp}.csv"
             df_org.to_csv(filename_org, index=False, encoding='utf-8-sig')
-            print(f"📁 Saved {org} dataset: {filename_org} ({len(df_org)} documents)")
+            print(f"  Saved {org} dataset: {filename_org} ({len(df_org)} documents)")
         
         # Save high priority documents only
         df_high = df_all[df_all['Priority'] == 'High']
@@ -325,22 +325,22 @@ class ThaiEnergyWebScraper:
         with open(summary_file, 'w', encoding='utf-8') as f:
             json.dump(summary, f, ensure_ascii=False, indent=2)
         
-        print(f"📋 Saved summary report: {summary_file}")
+        print(f"  Saved summary report: {summary_file}")
         
         # Print summary to console
-        print(f"\n📊 SCRAPING SUMMARY:")
+        print(f"\n  SCRAPING SUMMARY:")
         print("=" * 50)
-        print(f"📄 Total Documents: {summary['total_documents']}")
-        print(f"🏢 Sources: {len(summary['sources'])}")
+        print(f"  Total Documents: {summary['total_documents']}")
+        print(f"  Sources: {len(summary['sources'])}")
         for source, count in summary['sources'].items():
             print(f"   • {source}: {count} documents")
-        print(f"📋 Document Types: {len(summary['document_types'])}")
+        print(f"  Document Types: {len(summary['document_types'])}")
         for doc_type, count in summary['document_types'].items():
             print(f"   • {doc_type}: {count} documents")
 
 def main():
     """Main execution function"""
-    print("🇹🇭 THAI ENERGY SECTOR COMPREHENSIVE WEB SCRAPER")
+    print("   THAI ENERGY SECTOR COMPREHENSIVE WEB SCRAPER")
     print("=" * 60)
     print("Targets: EGAT, PEA, MEA, Ministry of Energy, ERC, EPPO")
     print("Purpose: LLM Training Data Collection")
@@ -357,31 +357,31 @@ def main():
             # Save all data to files
             main_file = scraper.save_to_files()
             
-            print(f"\n🎉 SUCCESS! SCRAPING COMPLETED")
+            print(f"\n  SUCCESS! SCRAPING COMPLETED")
             print("=" * 50)
-            print(f"✅ Total documents collected: {total_docs}")
-            print(f"📄 Main dataset file: {main_file}")
-            print(f"📁 Files saved to current directory")
-            print(f"📤 Ready for Google Drive upload!")
+            print(f"[OK] Total documents collected: {total_docs}")
+            print(f"  Main dataset file: {main_file}")
+            print(f"  Files saved to current directory")
+            print(f"  Ready for Google Drive upload!")
             
-            print(f"\n📋 NEXT STEPS:")
+            print(f"\n  NEXT STEPS:")
             print("1. Upload CSV files to your Google Drive folder structure")
             print("2. Use high priority dataset for immediate LLM training")
             print("3. Upload to Hugging Face for fine-tuning")
             print("4. Ready for tomorrow's PEA ambassador demo!")
             
         else:
-            print("❌ No documents collected. Check internet connection and website availability.")
+            print("[ERROR] No documents collected. Check internet connection and website availability.")
             
     except KeyboardInterrupt:
         print("\n⏹️ Scraping interrupted by user")
         if scraper.all_documents:
-            print("💾 Saving collected data before exit...")
+            print("  Saving collected data before exit...")
             scraper.save_to_files()
     except Exception as e:
-        print(f"❌ Unexpected error: {str(e)}")
+        print(f"[ERROR] Unexpected error: {str(e)}")
         if scraper.all_documents:
-            print("💾 Saving collected data before exit...")
+            print("  Saving collected data before exit...")
             scraper.save_to_files()
 
 if __name__ == "__main__":
