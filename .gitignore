@@ -1,0 +1,31 @@
+﻿service-account.json
+__pycache__/
+node_modules/
+automation_artifacts/
+*.pyc
+*.log
+*.csv
+*.json
+*.jsonl
+*.docx
+*.pdf
+IMG_*.jpg
+*.png
+*token*.txt
+*Token*.txt
+*API*.txt
+credentials_master_*.txt
+A2E AI-token.txt
+HF write token.txt
+PEALllm Githup token.txt
+Supabase Access Tokens.txt
+manus-hugging face access token.txt
+PEA Avatar googlesheet Authen.txt
+Freesound API credentials.txt
+Runway LM-api.txt
+Youtube-data-api-v3 .txt
+elevenlabs.io API.txt
+gemini api.txt
+Heygen API.txt
+Foley-Sounds/
+kbd-ai-autofac/

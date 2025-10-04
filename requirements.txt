@@ -1,0 +1,13 @@
+transformers
+torch
+datasets
+huggingface_hub
+accelerate
+gradio
+spaces
+requests
+beautifulsoup4
+pandas
+google-api-python-client
+google-auth
+google-auth-oauthlib
