@@ -63,6 +63,9 @@ class GoogleDriveClient:
         metadata = {"name": file_path.name, "parents": [folder_id]}
         media = MediaFileUpload(str(file_path), mimetype=mime_type, resumable=True)
         request = self.service.files().create(body=metadata, media_body=media, fields="id, webViewLink")
-        response = request.execute()
+        try:
+            response = request.execute()
+        except Exception as exc:
+            print(f"[WARN] Google Drive upload failed for {file_path.name}: {exc}")
+            return None
         return response.get("webViewLink")
-
