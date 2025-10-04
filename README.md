@@ -1,6 +1,6 @@
----
+﻿---
 title: PEAllm - Thailand Energy AI Assistant
-emoji: ??
+emoji: 🌏
 colorFrom: blue
 colorTo: green
 sdk: gradio
@@ -10,18 +10,18 @@ pinned: false
 license: mit
 ---
 
-# ?? PEAllm - Thailand Energy AI Assistant
+# 🌏 PEAllm - Thailand Energy AI Assistant
 
 **PEAllm (Provincial Electricity Authority LLM)** is an AI assistant specialized in Thailand's energy sector, trained on data from major Thai energy organizations.
 
-## ? About
+## ℹ️ About
 
 PEAllm is fine-tuned from [Sakjay/Thai-Llama3-8b](https://huggingface.co/Sakjay/Thai-Llama3-8b) to provide accurate information about Thailand's energy landscape in both Thai and English languages.
 
-## ? Covered Organizations
+## 🏢 Covered Organizations
 
 - **EGAT** - Electricity Generating Authority of Thailand
-- **MEA** - Metropolitan Electricity Authority  
+- **MEA** - Metropolitan Electricity Authority
 - **PEA** - Provincial Electricity Authority
 - **EPPO** - Energy Policy and Planning Office
 - **DEDE** - Department of Alternative Energy Development
@@ -29,7 +29,7 @@ PEAllm is fine-tuned from [Sakjay/Thai-Llama3-8b](https://huggingface.co/Sakjay/
 - **PTT** - PTT Public Company Limited
 - **MOE** - Ministry of Energy
 
-## ?? What You Can Ask
+## ❓ What You Can Ask
 
 - Power generation capacity and statistics
 - Electricity distribution and coverage
@@ -39,34 +39,21 @@ PEAllm is fine-tuned from [Sakjay/Thai-Llama3-8b](https://huggingface.co/Sakjay/
 - Oil & gas sector information
 - Energy transition plans
 
-## ?? Features
+## ✨ Features
 
-- **Bilingual**: Supports both Thai (�?? and English
+- **Bilingual**: Supports both Thai (ไทย) and English
 - **Specialized**: Trained specifically on Thailand energy sector data
 - **PDPA Compliant**: Uses only publicly available information
 - **Real-time**: Provides up-to-date energy sector insights
 
-## ?? Training Data
+## 📚 Example Questions
 
-Trained on 40+ bilingual samples covering:
-- EGAT operations (16,261 MW capacity, 54 power plants)
-- MEA service area (Bangkok, 4.3M customers)
-- PEA coverage (74 provinces, 99% of Thailand)
-- EPPO statistics (140,000 ktoe annual consumption)
-- DEDE renewable targets (30% by 2036)
-- Energy policies (Carbon neutral 2050, Net zero 2065)
-
-## ? Usage
-
-Simply type your question about Thailand's energy sector in Thai or English, and PEAllm will provide relevant information.
-
-**Example Questions:**
 - "Tell me about EGAT's power generation capacity"
-- "MEA ให�??กา??�?ลู�?้า?"
+- "MEA ให้ข้อมูลลูกค้าอย่างไร?"
 - "What is Thailand's renewable energy target?"
-- "�??AEDP คืออ�??"
+- "แผน AEDP คืออะไร?"
 
-## ???Technical Details
+## 🛠️ Technical Details
 
 - **Base Model**: Sakjay/Thai-Llama3-8b
 - **Architecture**: Llama 3 8B
@@ -74,11 +61,11 @@ Simply type your question about Thailand's energy sector in Thai or English, and
 - **Languages**: Thai + English
 - **Framework**: Transformers, PyTorch
 
-## ?? License
+## 📄 License
 
 MIT License
 
-## ????Created By
+## 👤 Created By
 
 **Jack Yang** (@jackyanghxc)
 - Email: jackyang.hatari@gmail.com
@@ -86,7 +73,7 @@ MIT License
 
 ---
 
-*Made with ?? for Thailand's energy sector*
+*Made with ❤️ for Thailand's energy sector*
 
 ## Automation Pipeline
 
@@ -97,7 +84,6 @@ MIT License
 - **Trigger remote training**: Define `HF_TRAINING_TRIGGER_URL` (AutoTrain webhook or custom API). The pipeline POSTs the dataset metadata using your `HF_API_TOKEN`.
 - **Generate refresh token**: Run `python automation/get_refresh_token.py <CLIENT_ID> <CLIENT_SECRET>` once, copy the printed refresh token into your GitHub secrets as `GOOGLE_REFRESH_TOKEN`.
 
-
 ### GitHub Actions
 
 - Workflow: `.github/workflows/data_pipeline.yml` runs every 6 hours or manually.
@@ -107,9 +93,6 @@ MIT License
 ### Remote Training
 
 - Configure a Hugging Face AutoTrain (or Training Jobs) project targeting `jackyanghxc/peallm-poc` as the dataset.
-- Copy the project webhook URL and store it as `HF_TRAINING_TRIGGER_URL`. Provide optional JSON overrides via `HF_TRAINING_TRIGGER_PAYLOAD` (e.g. `{\"job\":\"daily\"}`).
+- Copy the project webhook URL and store it as `HF_TRAINING_TRIGGER_URL`. Provide optional JSON overrides via `HF_TRAINING_TRIGGER_PAYLOAD` (e.g. `{ "job": "daily" }`).
 - When the GitHub Action runs, it publishes the latest dataset shard and then hits the webhook so AutoTrain fine-tunes Sakjay/Thai-Llama3-8b and pushes adapters to `jackyanghxc/PEAllm`.
 - Monitor AutoTrain logs; successful runs rebuild the Space to serve the newest weights.
-
-
-
