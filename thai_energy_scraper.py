@@ -239,7 +239,7 @@ class ThaiEnergyWebScraper:
                 self.extract_documents_from_page(subpage_url, config)
                 
         except Exception as e:
-            print(f"⚠️ Error in deep scraping {website_name}: {str(e)}")
+            print(f"[WARN]️ Error in deep scraping {website_name}: {str(e)}")
 
     def scrape_all_websites(self):
         """Scrape all configured websites"""

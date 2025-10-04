@@ -1,7 +1,15 @@
-from dataclasses import dataclass
+﻿from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 import os
+
+
+def _optional(env: os._Environ[str], key: str) -> Optional[str]:
+    value = env.get(key)
+    if value is None:
+        return None
+    value = value.strip()
+    return value or None
 
 
 @dataclass
@@ -33,7 +41,7 @@ class PipelineConfig:
         for path in (raw_dir, processed_dir, compliance_dir):
             path.mkdir(parents=True, exist_ok=True)
 
-        service_account_setting = env.get("GOOGLE_SERVICE_ACCOUNT_FILE")
+        service_account_setting = _optional(env, "GOOGLE_SERVICE_ACCOUNT_FILE")
         service_account_path: Optional[Path] = None
         if service_account_setting:
             candidate = Path(service_account_setting)
@@ -44,22 +52,25 @@ class PipelineConfig:
             if default_sa.exists():
                 service_account_path = default_sa
 
+        timeout_value = _optional(env, "HF_TRAINING_TRIGGER_TIMEOUT")
+        hf_timeout = int(timeout_value) if timeout_value else 60
+
         return cls(
             raw_output_dir=raw_dir,
             processed_output_dir=processed_dir,
             compliance_output_dir=compliance_dir,
             hf_dataset_repo=env.get("HF_DATASET_REPO_ID", "jackyanghxc/peallm-poc"),
-            hf_token=env.get("HF_API_TOKEN"),
-            drive_raw_folder_id=env.get("GOOGLE_DRIVE_RAW_FOLDER_ID"),
-            drive_processed_folder_id=env.get("GOOGLE_DRIVE_PROCESSED_FOLDER_ID"),
-            drive_compliance_folder_id=env.get("GOOGLE_DRIVE_PDPA_FOLDER_ID"),
+            hf_token=_optional(env, "HF_API_TOKEN"),
+            drive_raw_folder_id=_optional(env, "GOOGLE_DRIVE_RAW_FOLDER_ID"),
+            drive_processed_folder_id=_optional(env, "GOOGLE_DRIVE_PROCESSED_FOLDER_ID"),
+            drive_compliance_folder_id=_optional(env, "GOOGLE_DRIVE_PDPA_FOLDER_ID"),
             service_account_file=service_account_path,
-            google_client_id=env.get("GOOGLE_CLIENT_ID"),
-            google_client_secret=env.get("GOOGLE_CLIENT_SECRET"),
-            google_refresh_token=env.get("GOOGLE_REFRESH_TOKEN"),
-            hf_training_trigger_url=env.get("HF_TRAINING_TRIGGER_URL"),
-            hf_training_payload=env.get("HF_TRAINING_TRIGGER_PAYLOAD"),
-            hf_training_method=env.get("HF_TRAINING_TRIGGER_METHOD", "POST"),
-            hf_training_timeout=int(env.get("HF_TRAINING_TRIGGER_TIMEOUT", "60")),
+            google_client_id=_optional(env, "GOOGLE_CLIENT_ID"),
+            google_client_secret=_optional(env, "GOOGLE_CLIENT_SECRET"),
+            google_refresh_token=_optional(env, "GOOGLE_REFRESH_TOKEN"),
+            hf_training_trigger_url=_optional(env, "HF_TRAINING_TRIGGER_URL"),
+            hf_training_payload=_optional(env, "HF_TRAINING_TRIGGER_PAYLOAD"),
+            hf_training_method=_optional(env, "HF_TRAINING_TRIGGER_METHOD") or "POST",
+            hf_training_timeout=hf_timeout,
             timezone=env.get("PEALLM_TIMEZONE", "Asia/Bangkok"),
         )
